@@ -62,10 +62,17 @@
                 </a>
             </td>
             <td>
-                <a class="btn btn-danger"
-                   href="<%=request.getContextPath()%>/LocationServlet?action=borrar&location_id=<%=loc.getLocationId()%>">
-                    <i class="bi bi-trash3"></i>
-                </a>
+                <form method="post" action="<%=request.getContextPath()%>/LocationServlet?action=borrar" id="formBorrar">
+                    <input type="hidden" name="location_id" value="<%=loc.getLocationId()%>">
+                    <a class="btn btn-danger" onclick=enviarForm('formBorrar')>
+                        <i class="bi bi-trash3"></i>
+                    </a>
+                    <script>
+                        function enviarForm(formID){
+                            document.getElementById(formID).submit();
+                        }
+                    </script>
+                </form>
             </td>
         </tr>
         <%

@@ -76,6 +76,23 @@ public class LocationDao extends DaoBase{
         }
     }
 
+    public void deleteLocation(int locationID){
+        String sql="update departments set location_id=null where location_id=?";
+        try (PreparedStatement pstmt = getConnection().prepareStatement(sql)) {
+            pstmt.setInt(1,locationID);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        sql="delete from locations where location_id=?";
+        try (PreparedStatement pstmt = getConnection().prepareStatement(sql)) {
+            pstmt.setInt(1,locationID);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public int getLastLocationID(){
         try (ResultSet rs = getConnection().createStatement().executeQuery("select location_id from locations order by location_id desc limit 1")) {
             if(rs.next()){
