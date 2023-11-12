@@ -124,6 +124,15 @@ public class DepartmentDao extends DaoBase {
     }
 
     public void borrarDepartment(int departmentId){
+        String sql1 = "update employees set department_id = null where department_id=?";
+        try(Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql1)){
+            pstmt.setInt(1,departmentId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
         String sql="delete from departments where department_id=?";
         try(Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql)){
