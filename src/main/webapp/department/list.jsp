@@ -10,9 +10,9 @@
     <title>Listar Departments</title>
 </head>
 <body>
-<div class='container'>
+<div class="container">
 
-    <h1 class='mb-3'>Lista de Departments en hr</h1>
+    <h1 class="mb-3">Lista de Departments en hr</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="<%= request.getContextPath()%>">Home</a></li>
@@ -37,10 +37,20 @@
             </td>
             <td><%=dep.getDepartmentName()%>
             </td>
-            <td><%=dep.getManager().getFullName()%>
+            <%if(dep.getManager() != null){%>
+            <td><%=dep.getManager().getEmployeeId() == 0 ? "-- Sin manager --" : dep.getManager().getFullName()%>
             </td>
-            <td><%=dep.getLocation().getCity()%>
+            <%}else{%>
+            <td><%="-- Sin manager --"%>
             </td>
+            <%}%>
+            <%if(dep.getLocation() != null){%>
+            <td><%=dep.getLocation().getLocationId() == 0 ? "-- Sin location --" : dep.getLocation().getCity()%>
+            </td>
+            <%}else{%>
+            <td><%="-- Sin location --"%>
+            </td>
+            <%}%>
             <td>
                 <a class="btn btn-primary"
                    href="<%=request.getContextPath()%>/DepartmentServlet?action=editar&id=<%=dep.getDepartmentId()%>">

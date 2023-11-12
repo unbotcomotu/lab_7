@@ -50,11 +50,17 @@ public class DepartmentServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action") == null ? "lista" : req.getParameter("action");
         DepartmentDao departmentDao = new DepartmentDao();
-
+        EmployeeDao employeeDao = new EmployeeDao();
+        LocationDao locationDao = new LocationDao();
         switch (action){
             case "crear":
                 Department department = new Department();
                 department.setDepartmentId(Integer.parseInt(req.getParameter("department_id")));
+                boolean isAllValid = true;
+
+                if(req.getParameter("department_name").length() > 30 || req.getParameter("department_name").isEmpty()){
+                    isAllValid = false;
+                }
                 department.setDepartmentName(req.getParameter("department_name"));
                 Employee manager = new Employee();
                 manager.setEmployeeId(Integer.parseInt(req.getParameter("manager_id")));
@@ -62,8 +68,15 @@ public class DepartmentServlet extends HttpServlet {
                 Location location = new Location();
                 location.setLocationId(Integer.parseInt(req.getParameter("location_id")));
                 department.setLocation(location);
-                departmentDao.crearDepartment(department);
-                resp.sendRedirect("DepartmentServlet");
+                if(isAllValid){
+                    departmentDao.crearDepartment(department);
+                    resp.sendRedirect("DepartmentServlet");
+                }else{
+                    req.setAttribute("managerList",employeeDao.listarEmpleados());
+                    req.setAttribute("locationList",locationDao.locationList());
+                    req.setAttribute("ultimoDepartment",departmentDao.lista().get(departmentDao.lista().size()-1));
+                    req.getRequestDispatcher("department/crearDepartment.jsp").forward(req,resp);
+                }
                 break;
             case "editar":
 
