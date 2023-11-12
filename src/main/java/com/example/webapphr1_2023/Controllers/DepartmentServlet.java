@@ -107,7 +107,8 @@ public class DepartmentServlet extends HttpServlet {
                 }
                 break;
             case "borrar":
-
+                departmentDao.borrarDepartment(Integer.parseInt(req.getParameter("id")));
+                resp.sendRedirect(req.getContextPath()+"/DepartmentServlet");
                 break;
         }
     }

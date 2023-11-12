@@ -122,4 +122,15 @@ public class DepartmentDao extends DaoBase {
             throw new RuntimeException(e);
         }
     }
+
+    public void borrarDepartment(int departmentId){
+        String sql="delete from departments where department_id=?";
+        try(Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql)){
+            pstmt.setInt(1,departmentId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

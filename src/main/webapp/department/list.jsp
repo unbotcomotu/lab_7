@@ -58,10 +58,14 @@
                 </a>
             </td>
             <td>
-                <a class="btn btn-danger"
-                   href="<%=request.getContextPath()%>/DepartmentServlet?action=borrar&id=<%=dep.getDepartmentId()%>">
-                    <i class="bi bi-trash3"></i>
-                </a>
+                <form method="post" action="DepartmentServlet?action=borrar">
+                    <button type="submit" style="border: 0; background: none; color: inherit">
+                        <a class="btn btn-danger">
+                            <i class="bi bi-trash3"></i>
+                        </a>
+                        <input type="hidden" name="id" value="<%=dep.getDepartmentId()%>">
+                    </button>
+                </form>
             </td>
         </tr>
         <%
