@@ -31,9 +31,14 @@ public class LocationServlet extends HttpServlet {
                 break;
             case "agregar":
                 request.setAttribute("countriesList",cD.countriesList());
+                request.setAttribute("alert",request.getParameter("alert"));
                 request.getRequestDispatcher("location/locationCreate.jsp").forward(request, response);
                 break;
             case "editar":
+                request.setAttribute("countriesList",cD.countriesList());
+                request.setAttribute("getLocation",lD.getLocation(Integer.parseInt(request.getParameter("location_id"))));
+                request.setAttribute("alert",request.getParameter("alert"));
+                request.getRequestDispatcher("location/locationEdit.jsp").forward(request, response);
                 break;
             case "borrar":
                 break;
@@ -42,7 +47,6 @@ public class LocationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        super.doPost(request, response);
         LocationDao lD=new LocationDao();
         String action = request.getParameter("action") == null ? "lista" : request.getParameter("action");
         switch (action){
@@ -52,15 +56,33 @@ public class LocationServlet extends HttpServlet {
                 String city=request.getParameter("city");
                 String stateProvince=request.getParameter("state_province");
                 String countryID=request.getParameter("country_id");
-                if(streetAddress!=null&&postalCode!=null&&city!=null&&stateProvince!=null&&countryID!=null){
+                if(streetAddress!=""&&postalCode!=""&&city!=""&&stateProvince!=""&&countryID!=""){
                     if(streetAddress.length()>40||postalCode.length()>12||city.length()>30||stateProvince.length()>25){
-                        response.sendRedirect("LocationServlet?alert=2");
+                        response.sendRedirect("LocationServlet?action=agregar&alert=2");
                     }else{
                         lD.createLocation(streetAddress,postalCode,city,stateProvince,countryID);
-                        response.sendRedirect("LocationServlet");
+                        response.sendRedirect("LocationServlet?alert=1");
                     }
                 }else{
-                    response.sendRedirect("LocationServlet?alert=1");
+                    response.sendRedirect("LocationServlet?action=agregar&alert=1");
+                }
+                break;
+            case "editar":
+                int locationID=Integer.parseInt(request.getParameter("location_id"));
+                String streetAddress2=request.getParameter("street_address");
+                String postalCode2=request.getParameter("postal_code");
+                String city2=request.getParameter("city");
+                String stateProvince2=request.getParameter("state_province");
+                String countryID2=request.getParameter("country_id");
+                if(streetAddress2!=""&&postalCode2!=""&&city2!=""&&stateProvince2!=""&&countryID2!=""){
+                    if(streetAddress2.length()>40||postalCode2.length()>12||city2.length()>30||stateProvince2.length()>25){
+                        response.sendRedirect("LocationServlet?action=editar&alert=2&id_location="+locationID);
+                    }else{
+                        lD.editLocation(streetAddress2,postalCode2,city2,stateProvince2,countryID2,locationID);
+                        response.sendRedirect("LocationServlet?alert=2");
+                    }
+                }else{
+                    response.sendRedirect("LocationServlet?action=editar&alert=1&id_location="+locationID);
                 }
                 break;
         }

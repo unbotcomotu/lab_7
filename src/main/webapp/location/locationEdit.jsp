@@ -1,4 +1,6 @@
-<%--
+<%@ page import="com.example.webapphr1_2023.Beans.Location" %>
+<%@ page import="com.example.webapphr1_2023.Beans.Country" %>
+<%@ page import="java.util.ArrayList" %><%--
   Created by IntelliJ IDEA.
   User: unbotcomotu
   Date: 11/12/2023
@@ -9,78 +11,52 @@
 <html>
 <head>
     <jsp:include page="../includes/bootstrap_header.jsp"/>
-    <title>Editar empleado</title>
+    <%ArrayList<Country> countriesList=(ArrayList<Country>) request.getAttribute("countriesList");
+        Location l=(Location) request.getAttribute("getLocation");
+        String alert=(String) request.getAttribute("alert");%>
+    <title>Editar dirección</title>
 </head>
 <body>
 <div class='container mb-4'>
     <div class="row justify-content-center">
-        <h1 class='mb-3'>Editar usuario</h1>
+        <h1 class='mb-3'>Editar dirección</h1>
         <hr>
-        <form method="POST" action="EmployeeServlet?action=actualizar" class="col-md-6 col-lg-6">
-            <input type="hidden" name="employee_id" value="<%= empleado.getEmployeeId()%>"/>
+        <form method="POST" action="LocationServlet?action=editar" class="col-md-6 col-lg-6">
+            <input type="hidden" name="location_id" value="<%= l.getLocationId()%>"/>
+            <h1 class='mb-3'>Nueva dirección</h1>
+            <hr>
             <div class="mb-3">
-                <label for="first_name">First Name</label>
-                <input type="text" class="form-control form-control-sm" name="first_name" id="first_name"
-                       value="<%= empleado.getFirstName() == null ? "" : empleado.getFirstName()%>">
+                <label for="street_address">Dirección de calle</label>
+                <input type="text" class="form-control form-control-sm" name="street_address" id="street_address" value="<%=l.getStreetAddress()%>">
             </div>
             <div class="mb-3">
-                <label for="last_name">Last Name</label>
-                <input type="text" class="form-control form-control-sm" name="last_name" id="last_name"
-                       value="<%= empleado.getLastName() == null ? "" : empleado.getLastName()%>">
+                <label for="postal_code">Código postal</label>
+                <input type="text" class="form-control form-control-sm" name="postal_code" id="postal_code" value="<%=l.getPostalCode()%>">
             </div>
             <div class="mb-3">
-                <label for="email">Email</label>
-                <input type="text" class="form-control form-control-sm" name="email" id="email"
-                       value="<%= empleado.getEmail() == null ? "" : empleado.getEmail()%>">
+                <label for="city">Ciudad</label>
+                <input type="text" class="form-control form-control-sm" name="city" id="city" value="<%=l.getCity()%>">
             </div>
             <div class="mb-3">
-                <label for="phone">Phone number</label>
-                <input type="text" class="form-control form-control-sm" name="phone" id="phone"
-                       value="<%= empleado.getPhoneNumber() == null ? "" : empleado.getPhoneNumber()%>">
+                <label for="state_province">Provincia</label>
+                <input type="text" class="form-control form-control-sm" name="state_province" id="state_province" value="<%=l.getStateProvince()%>">
             </div>
             <div class="mb-3">
-                <label for="hire_date">Hire date</label>
-                <input type="text" class="form-control form-control-sm" name="hire_date" id="hire_date"
-                       value="<%= empleado.getHireDate() == null ? "" : empleado.getHireDate()%>">
-            </div>
-            <div class="mb-3">
-                <label for="job_id">Job</label>
-                <select name="job_id" class="form-select" id="job_id">
-                    <% for(Job job: listaTrabajos){ %>
-                    <option value="<%=job.getJobId()%>"  <%=job.getJobId().equals(empleado.getJob().getJobId())?"selected":""%>   > <%=job.getJobTitle()%> </option>
+                <label for="country_id">País</label>
+                <select name="country_id" class="form-select" id="country_id">
+                    <% for(Country c: countriesList){ %>
+                    <option value="<%=c.getCountryId()%>" <%if(c.getCountryId().equals(l.getCountry().getCountryId())){%>selected<%}%>> <%=c.getCountryName()%> </option>
                     <% } %>
                 </select>
             </div>
-            <div class="mb-3">
-                <label for="salary">Salary</label>
-                <input type="text" class="form-control form-control-sm" name="salary" id="salary"
-                       value="<%= empleado.getSalary().equals("0.0") ? "" : empleado.getSalary()%>">
-            </div>
-            <div class="mb-3">
-                <label for="commission">Commision PCT</label>
-                <input type="text" class="form-control form-control-sm" name="commission" id="commission"
-                       value="<%= empleado.getCommissionPct() == null ? "" : empleado.getCommissionPct()%>">
-            </div>
-            <div class="mb-3">
-                <label for="manager_id">Manager</label>
-                <select name="manager_id" class="form-select" id="manager_id">
-                    <option value="0">-- Sin jefe --</option>
-                    <% for(Employee manager: listaJefes){ %>
-                    <option value="<%=manager!=null ? manager.getEmployeeId() : 0%>" <%=manager!=null && empleado.getManager()!=null && (manager.getEmployeeId() == empleado.getManager().getEmployeeId())?"selected":""%>  > <%=manager!=null? manager.getFullName(): ""%> </option>
-                    <% } %>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="department_id">Department</label>
-                <select name="department_id" class="form-select" id="department_id">
-                    <option value="0">-- Sin departamento --</option>
-                    <% for(Department department: listaDepartamentos){ %>
-                    <option value="<%=department.getDepartmentId()%>" <%=department.getDepartmentId() == empleado.getDepartment().getDepartmentId()?"selected":""%>   > <%=department.getDepartmentName()%> </option>
-                    <% } %>
-                </select>
-            </div>
-            <a href="<%= request.getContextPath()%>/EmployeeServlet" class="btn btn-danger">Cancelar</a>
-            <input type="submit" value="Actualizar" class="btn btn-primary"/>
+            <a href="<%= request.getContextPath()%>/LocationServlet" class="btn btn-danger">Cancelar</a>
+            <input type="submit" value="Guardar" class="btn btn-primary"/>
+            <%if(alert!=null){
+                if(alert.equals("1")){%>
+            <a style="color: red">Todos los campos tienen que estar llenos.</a>
+            <%}else if(alert.equals("2")){%>
+            <a style="color: red">No sobrepase la cantidad límite de caracteres por campo.</a>
+            <%}}%>
         </form>
     </div>
 </div>

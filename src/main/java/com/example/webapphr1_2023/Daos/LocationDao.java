@@ -47,14 +47,42 @@ public class LocationDao extends DaoBase{
     }
 
     public void createLocation(String streetAddress, String postalCode, String city, String stateProvince,String countryID){
-        String sql="insert into locations (street_address,postal_code,city,state_province,country_id) values (?,?,?,?,?)";
+        String sql="insert into locations (location_id,street_address,postal_code,city,state_province,country_id) values (?,?,?,?,?,?)";
+        try (PreparedStatement pstmt = getConnection().prepareStatement(sql)) {
+            pstmt.setInt(1,getLastLocationID()+100);
+            pstmt.setString(2,streetAddress);
+            pstmt.setString(3,postalCode);
+            pstmt.setString(4,city);
+            pstmt.setString(5,stateProvince);
+            pstmt.setString(6,countryID);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void editLocation(String streetAddress, String postalCode, String city, String stateProvince,String countryID,int locationID){
+        String sql="update locations set street_address=?,postal_code=?,city=?,state_province=?,country_id=? where location_id=?";
         try (PreparedStatement pstmt = getConnection().prepareStatement(sql)) {
             pstmt.setString(1,streetAddress);
             pstmt.setString(2,postalCode);
             pstmt.setString(3,city);
             pstmt.setString(4,stateProvince);
             pstmt.setString(5,countryID);
+            pstmt.setInt(6,locationID);
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public int getLastLocationID(){
+        try (ResultSet rs = getConnection().createStatement().executeQuery("select location_id from locations order by location_id desc limit 1")) {
+            if(rs.next()){
+                return rs.getInt(1);
+            }else {
+                return 0;
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
