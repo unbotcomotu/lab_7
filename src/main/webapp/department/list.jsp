@@ -19,8 +19,7 @@
             <li class="breadcrumb-item active">Departments</li>
         </ol>
     </nav>
-    <a class="btn btn-primary mb-3" href="<%=request.getContextPath()%>/DepartmentServlet?action=crear">Crear
-        Department</a>
+    <a class="btn btn-primary mb-3" href="<%=request.getContextPath()%>/DepartmentServlet?action=crear">Crear Department</a>
     <table class="table">
         <tr>
             <th>Dep ID</th>

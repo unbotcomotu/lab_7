@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <jsp:useBean type="java.util.ArrayList<com.example.webapphr1_2023.Beans.Location>" scope="request" id="locationList"/>
-
+<%String alert=(String) request.getAttribute("alert");%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,8 +19,15 @@
             <li class="breadcrumb-item active">Locations</li>
         </ol>
     </nav>
-    <a class="btn btn-primary mb-3" href="<%=request.getContextPath()%>/LocationServlet?action=formCrear">Crear
-        Location</a>
+    <a class="btn btn-primary mb-3" href="<%=request.getContextPath()%>/LocationServlet?action=agregar">Crear dirección</a>
+    <%if(alert!=null){
+        if(alert.equals("1")){%>
+    <a style="color: blue">Dirección creada exitosamente</a>
+        <%}else if(alert.equals("2")){%>
+    <a style="color: blue">Dirección editada exitosamente</a>
+        <%}else if(alert.equals("3")){%>
+    <a style="color: blue">Dirreción borrada exitosamente</a>
+    <%}}%>
     <table class="table">
         <tr>
             <th>Loc ID</th>
@@ -50,15 +57,22 @@
             </td>
             <td>
                 <a class="btn btn-primary"
-                   href="<%=request.getContextPath()%>/LocationServlet?action=editar&id=<%=loc.getLocationId()%>">
+                   href="<%=request.getContextPath()%>/LocationServlet?action=editar&location_id=<%=loc.getLocationId()%>">
                     <i class="bi bi-pencil-square"></i>
                 </a>
             </td>
             <td>
-                <a class="btn btn-danger"
-                   href="<%=request.getContextPath()%>/LocationServlet?action=borrar&id=<%=loc.getLocationId()%>">
-                    <i class="bi bi-trash3"></i>
-                </a>
+                <form method="post" action="<%=request.getContextPath()%>/LocationServlet?action=borrar" id="formBorrar">
+                    <input type="hidden" name="location_id" value="<%=loc.getLocationId()%>">
+                    <a class="btn btn-danger" onclick=enviarForm('formBorrar')>
+                        <i class="bi bi-trash3"></i>
+                    </a>
+                    <script>
+                        function enviarForm(formID){
+                            document.getElementById(formID).submit();
+                        }
+                    </script>
+                </form>
             </td>
         </tr>
         <%

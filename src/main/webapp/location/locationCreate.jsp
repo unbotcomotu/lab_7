@@ -7,12 +7,13 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%ArrayList<Country>countriesList=(ArrayList<Country>) request.getAttribute("countriesList");%>
+<%ArrayList<Country>countriesList=(ArrayList<Country>) request.getAttribute("countriesList");
+String alert=(String) request.getAttribute("alert");%>
 <!DOCTYPE html>
 <html>
 <head>
     <jsp:include page="../includes/bootstrap_header.jsp"/>
-    <title>Nuevo empleado</title>
+    <title>Nueva dirección</title>
 </head>
 <body>
 <div class='container'>
@@ -37,7 +38,7 @@
                 <input type="text" class="form-control form-control-sm" name="state_province" id="state_province">
             </div>
             <div class="mb-3">
-                <label for="country_id">Ciudad</label>
+                <label for="country_id">País</label>
                 <select name="country_id" class="form-select" id="country_id">
                     <% for(Country c: countriesList){ %>
                     <option value="<%=c.getCountryId()%>"> <%=c.getCountryName()%> </option>
@@ -46,6 +47,12 @@
             </div>
             <a href="<%= request.getContextPath()%>/LocationServlet" class="btn btn-danger">Cancelar</a>
             <input type="submit" value="Guardar" class="btn btn-primary"/>
+            <%if(alert!=null){
+                if(alert.equals("1")){%>
+            <a style="color: red">Todos los campos tienen que estar llenos.</a>
+            <%}else if(alert.equals("2")){%>
+            <a style="color: red">No sobrepase la cantidad límite de caracteres por campo.</a>
+            <%}}%>
         </form>
     </div>
 </div>
