@@ -133,6 +133,15 @@ public class DepartmentDao extends DaoBase {
             throw new RuntimeException(e);
         }
 
+        String sql2 = "update job_history set department_id = null where department_id=?";
+        try(Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql2)){
+            pstmt.setInt(1,departmentId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
         String sql="delete from departments where department_id=?";
         try(Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql)){
