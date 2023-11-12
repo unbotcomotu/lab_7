@@ -6,7 +6,7 @@ public class Location {
     private String postalCode;
     private String city;
     private String stateProvince;
-    private Country country;
+    private Country country=new Country();
 
     public int getLocationId() {
         return locationId;
