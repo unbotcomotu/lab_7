@@ -19,7 +19,6 @@
                     <h1 class='mb-3'>Nuevo Department</h1>
                     <hr>
                     <div class="mb-3">
-                        <label for="department_id">Department ID</label>
                         <input type="hidden" class="form-control form-control-sm" name="department_id" id="department_id" value="<%=ultimoDepartment.getDepartmentId()+10%>">
                     </div>
                     <div class="mb-3">

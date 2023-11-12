@@ -15,7 +15,7 @@ public class DepartmentDao extends DaoBase {
         ArrayList<Department> list = new ArrayList<>();
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("select * from departments d left join employees m on d.manager_id = m.employee_id left join locations l on d.location_id = l.location_id order by d.department_id limit 1000")) {
+             ResultSet rs = stmt.executeQuery("select * from departments d left join employees m on d.manager_id = m.employee_id left join locations l on d.location_id = l.location_id order by d.department_id")) {
 
             while (rs.next()) {
                 Department department = new Department();
