@@ -19,7 +19,7 @@
             <li class="breadcrumb-item active">Departments</li>
         </ol>
     </nav>
-    <a class="btn btn-primary mb-3" href="<%=request.getContextPath()%>/JobServlet?action=formCrear">Crear
+    <a class="btn btn-primary mb-3" href="<%=request.getContextPath()%>/DepartmentServlet?action=crear">Crear
         Department</a>
     <table class="table">
         <tr>
@@ -38,9 +38,9 @@
             </td>
             <td><%=dep.getDepartmentName()%>
             </td>
-            <td><%=dep.getManagerId()%>
+            <td><%=dep.getManager().getFullName()%>
             </td>
-            <td><%=dep.getLocationId()%>
+            <td><%=dep.getLocation().getCity()%>
             </td>
             <td>
                 <a class="btn btn-primary"
