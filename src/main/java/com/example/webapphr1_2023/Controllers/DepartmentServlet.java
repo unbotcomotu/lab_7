@@ -40,8 +40,10 @@ public class DepartmentServlet extends HttpServlet {
                 req.getRequestDispatcher("department/crearDepartment.jsp").forward(req,resp);
                 break;
             case "editar":
-                break;
-            case "borrar":
+                req.setAttribute("managerList",employeeDao.listarEmpleados());
+                req.setAttribute("locationList",locationDao.locationList());
+                req.setAttribute("department",departmentDao.obtenerDepartmentPorId(Integer.parseInt(req.getParameter("id"))));
+                req.getRequestDispatcher("department/editarDepartment.jsp").forward(req,resp);
                 break;
         }
     }
@@ -52,6 +54,7 @@ public class DepartmentServlet extends HttpServlet {
         DepartmentDao departmentDao = new DepartmentDao();
         EmployeeDao employeeDao = new EmployeeDao();
         LocationDao locationDao = new LocationDao();
+
         switch (action){
             case "crear":
                 Department department = new Department();
@@ -70,7 +73,7 @@ public class DepartmentServlet extends HttpServlet {
                 department.setLocation(location);
                 if(isAllValid){
                     departmentDao.crearDepartment(department);
-                    resp.sendRedirect("DepartmentServlet");
+                    resp.sendRedirect(req.getContextPath()+"/DepartmentServlet");
                 }else{
                     req.setAttribute("managerList",employeeDao.listarEmpleados());
                     req.setAttribute("locationList",locationDao.locationList());
@@ -79,6 +82,31 @@ public class DepartmentServlet extends HttpServlet {
                 }
                 break;
             case "editar":
+                Department department2 = new Department();
+                department2.setDepartmentId(Integer.parseInt(req.getParameter("department_id")));
+                boolean isAllValid2 = true;
+
+                if(req.getParameter("department_name").length() > 30 || req.getParameter("department_name").isEmpty()){
+                    isAllValid2 = false;
+                }
+                department2.setDepartmentName(req.getParameter("department_name"));
+                Employee manager2 = new Employee();
+                manager2.setEmployeeId(Integer.parseInt(req.getParameter("manager_id")));
+                department2.setManager(manager2);
+                Location location2 = new Location();
+                location2.setLocationId(Integer.parseInt(req.getParameter("location_id")));
+                department2.setLocation(location2);
+                if(isAllValid2){
+                    departmentDao.editarDepartment(department2);
+                    resp.sendRedirect(req.getContextPath()+"/DepartmentServlet");
+                }else{
+                    req.setAttribute("managerList",employeeDao.listarEmpleados());
+                    req.setAttribute("locationList",locationDao.locationList());
+                    req.setAttribute("department",departmentDao.obtenerDepartmentPorId(Integer.parseInt(req.getParameter("department_id"))));
+                    req.getRequestDispatcher("department/editarDepartment.jsp").forward(req,resp);
+                }
+                break;
+            case "borrar":
 
                 break;
         }
